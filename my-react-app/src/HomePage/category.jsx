@@ -23,13 +23,16 @@ const BrowseByCategory = () => {
             <a
               key={category.id}
               href={category.link}
-              className="flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg overflow-hidden transition-transform transform hover:scale-105"
+              className="relative flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg overflow-hidden category-item"
             >
               <img
                 src={category.logo}
                 alt={category.name}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center overlay">
+                <span className="text-white text-lg font-semibold">{category.name}</span>
+              </div>
             </a>
           ))}
         </div>

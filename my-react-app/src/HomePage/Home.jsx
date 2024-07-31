@@ -5,6 +5,7 @@ import BrowseByCategory from "./category";
 import FlashSale from "./flash";
 import HeroSection from "./header";
 import { RevealBento } from "./newarrival";
+import Featured from "./featured";
 
 function Home (){
 
@@ -13,8 +14,10 @@ function Home (){
         <Navbar/>
         <HeroSection/>
         <FlashSale/>
-        <BrowseByCategory/>
         <BestSellingProducts/>
+        <BrowseByCategory/>
+        <Featured/>
+        
         <RevealBento/>
         <Footer/>
         </>
