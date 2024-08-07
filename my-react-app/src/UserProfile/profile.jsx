@@ -21,7 +21,7 @@ export default function Profile() {
           </nav>
         
           <div className="w-full md:w-3/4 bg-white p-6 shadow-md rounded-lg ml-0 md:ml-4">
-            <h1 className="text-2xl font-bold text-red-600">Welcome! Your Name!</h1>
+            <h1 className="text-2xl font-bold text-black">Welcome! Your Name!</h1>
             <h2 className="text-lg font-semibold text-red-500 mt-4">Edit Your Profile</h2>
         
             <form className="mt-4">

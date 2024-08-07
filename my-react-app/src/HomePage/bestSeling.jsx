@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 
 // Sample data for best-selling products
 const bestSellingProducts = [
-  { id: 1, name: 'Product 1', price: '$99.99', image: 'https://via.placeholder.com/300x200?text=Product+1' },
-  { id: 2, name: 'Product 2', price: '$79.99', image: 'https://via.placeholder.com/300x200?text=Product+2' },
-  { id: 3, name: 'Product 3', price: '$89.99', image: 'https://via.placeholder.com/300x200?text=Product+3' },
-  { id: 4, name: 'Product 4', price: '$119.99', image: 'https://via.placeholder.com/300x200?text=Product+4' },
-  { id: 5, name: 'Product 5', price: '$149.99', image: 'https://via.placeholder.com/300x200?text=Product+5' },
+  { id: 1, name: 'Product 1', price: '$99.99', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThwSjKNvTa_lx07vLu5A1OSk6u1FB1CKSeA&s' },
+  { id: 2, name: 'Product 2', price: '$79.99', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThwSjKNvTa_lx07vLu5A1OSk6u1FB1CKSeA&s' },
+  { id: 3, name: 'Product 3', price: '$89.99', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThwSjKNvTa_lx07vLu5A1OSk6u1FB1CKSeA&s' },
+  { id: 4, name: 'Product 4', price: '$119.99', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThwSjKNvTa_lx07vLu5A1OSk6u1FB1CKSeA&s' },
+  { id: 5, name: 'Product 5', price: '$149.99', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThwSjKNvTa_lx07vLu5A1OSk6u1FB1CKSeA&s' },
   // Add more products as needed
 ];
 

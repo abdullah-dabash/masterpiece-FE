@@ -7,10 +7,10 @@ import 'slick-carousel/slick/slick-theme.css';
 const FlashSale = () => {
   // Sample data for products
   const products = [
-    { id: 1, name: 'Product 1', price: '$99.99', image: 'https://via.placeholder.com/300x200?text=Product+1' },
-    { id: 2, name: 'Product 2', price: '$79.99', image: 'https://via.placeholder.com/300x200?text=Product+2' },
-    { id: 3, name: 'Product 3', price: '$89.99', image: 'https://via.placeholder.com/300x200?text=Product+3' },
-    { id: 4, name: 'Product 4', price: '$119.99', image: 'https://via.placeholder.com/300x200?text=Product+4' },
+    { id: 1, name: 'Product 1', price: '$99.99', image: 'https://i.pinimg.com/736x/4b/5d/75/4b5d751d859d01b4cbeed60a393d3b47.jpg' },
+    { id: 2, name: 'Product 2', price: '$79.99', image: 'https://i.etsystatic.com/25699268/r/il/ba927c/2733796021/il_fullxfull.2733796021_twh5.jpg' },
+    { id: 3, name: 'Product 3', price: '$89.99', image: 'https://amsiot.com/wp-content/uploads/2020/11/blog-lego-light@2x.png' },
+    { id: 4, name: 'Product 4', price: '$119.99', image: 'https://store.yeelight.com/cdn/shop/files/yeelight-smart-panels-2.jpg?v=1697528891' },
     // Add more products as needed
   ];
 

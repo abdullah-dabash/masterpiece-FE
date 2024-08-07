@@ -5,8 +5,8 @@ import Footer from './footer';
 const CartComponent = () => {
   const [couponCode, setCouponCode] = useState('');
   const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'High-Quality LED Light', price: 25.00, quantity: 2, image: 'https://via.placeholder.com/150', description: 'A bright LED light with adjustable brightness.' },
-    { id: 2, name: 'Smartphone Stand', price: 15.00, quantity: 1, image: 'https://via.placeholder.com/150', description: 'A sturdy stand for your smartphone.' },
+    { id: 1, name: 'High-Quality LED Light', price: 25.00, quantity: 2, image: 'https://store.yeelight.com/cdn/shop/files/yeelight-smart-panels-2.jpg?v=1697528891', description: 'A bright LED light with adjustable brightness.' },
+    { id: 2, name: 'Nano Leaf', price: 15.00, quantity: 1, image: 'https://www.batna24.com/img2/500/332491_162455.webp?20989284201', description: 'A sturdy stand for your smartphone.' },
   ]);
 
   const handleCouponChange = (e) => {

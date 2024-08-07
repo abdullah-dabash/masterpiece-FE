@@ -4,8 +4,8 @@ import Footer from './footer';
 
 // Example data for favorite items
 const initialFavorites = [
-  { id: 1, name: 'High-Quality LED Light', price: 25.00, image: 'https://via.placeholder.com/150', description: 'Bright and energy-efficient LED light.' },
-  { id: 2, name: 'Smartphone Stand', price: 15.00, image: 'https://via.placeholder.com/150', description: 'Adjustable stand for smartphones and tablets.' },
+  { id: 1, name: 'High-Quality LED Light', price: 25.00, image: 'https://i.pinimg.com/736x/4b/5d/75/4b5d751d859d01b4cbeed60a393d3b47.jpg', description: 'Bright and energy-efficient LED light.' },
+  { id: 2, name: 'Smartphone Stand', price: 15.00, image: 'https://amsiot.com/wp-content/uploads/2020/11/blog-lego-light@2x.png', description: 'Adjustable stand for smartphones and tablets.' },
 ];
 
 const Favorites = ({ onAddToCart }) => {
@@ -32,7 +32,7 @@ const Favorites = ({ onAddToCart }) => {
               </div>
               <button
                 onClick={() => handleAddToCart(item)}
-                className="mt-auto bg-black text-white rounded-lg py-2 px-4 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300"
+                className="mt-auto bg-red-500 text-white rounded-lg py-2 px-4 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-gray-300"
               >
                 Add to Cart
               </button>

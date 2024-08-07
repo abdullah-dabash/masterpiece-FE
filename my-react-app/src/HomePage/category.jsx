@@ -18,17 +18,17 @@ const BrowseByCategory = () => {
           <h2 className="text-2xl font-bold text-gray-800">Browse by Category</h2>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-10"> 
           {categories.map((category) => (
             <a
               key={category.id}
               href={category.link}
-              className="relative flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg overflow-hidden category-item"
+              className="relative flex items-center justify-center w-40 h-40 bg-white rounded-full shadow-lg overflow-hidden category-item" 
             >
               <img
                 src={category.logo}
                 alt={category.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover" 
               />
               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center overlay">
                 <span className="text-white text-lg font-semibold">{category.name}</span>

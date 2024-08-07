@@ -78,6 +78,22 @@ export default function Featured() {
                     />
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-4 py-1 rounded-full shadow-md">45 JOD</div>
                 </div>
+                <div className="relative group transition-transform transform hover:scale-105">
+                    <img
+                        src="https://9to5toys.com/wp-content/uploads/sites/5/2022/06/Govee-Glide-Hexa-Pro-wall.jpg?w=1024"
+                        alt="Super Mario Odyssey"
+                        className="w-full h-full object-cover rounded-lg shadow-lg"
+                    />
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-4 py-1 rounded-full shadow-md">45 JOD</div>
+                </div>
+                <div className="relative group transition-transform transform hover:scale-105">
+                    <img
+                        src="https://9to5toys.com/wp-content/uploads/sites/5/2022/06/Govee-Glide-Hexa-Pro-wall.jpg?w=1024"
+                        alt="Super Mario Odyssey"
+                        className="w-full h-full object-cover rounded-lg shadow-lg"
+                    />
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-4 py-1 rounded-full shadow-md">45 JOD</div>
+                </div>
             </div>
         </div>
     );
