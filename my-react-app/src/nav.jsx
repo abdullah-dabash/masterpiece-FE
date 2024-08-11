@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import RoomRenovation from './room/renovation'; // Import the RoomRenovation component
 import './index.css'; // Import your CSS file
 
 const Navbar = () => {
@@ -20,10 +21,11 @@ const Navbar = () => {
         </div>
 
         {/* Links (Home, Favorites, Contact, Register) - Centered */}
-        <div className="hidden md:flex flex-1 pl-28 justify-center space-x-8">
+        <div className="hidden md:flex flex-1 pl-48 justify-center space-x-8">
           <Link to="/" className="text-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-gray-300 moving-color">Home</Link>
           <Link to="/contact/ContactUs" className="text-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-gray-300 moving-color">Contact</Link>
           <Link to="/SignUp" className="text-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-gray-300 moving-color">Register</Link>
+          <Link to="/room/renovation" className="text-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-gray-300 moving-color">Room Renovation</Link>
         </div>
 
         {/* Search bar - Desktop */}
@@ -133,6 +135,7 @@ const Navbar = () => {
           <Link to="/" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-white dark:hover:bg-gray-700 dark:hover:text-gray-300">Home</Link>
           <Link to="/contact/contactUs" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-white dark:hover:bg-gray-700 dark:hover:text-gray-300">Contact</Link>
           <Link to="/SignUp" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-white dark:hover:bg-gray-700 dark:hover:text-gray-300">Register</Link>
+          <Link to="/room/renovation" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-white dark:hover:bg-gray-700 dark:hover:text-gray-300">Room Renovation</Link>
           <Link to="/profile" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-white dark:hover:bg-gray-700 dark:hover:text-gray-300">Profile</Link>
         </div>
       </div>

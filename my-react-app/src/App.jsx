@@ -7,6 +7,7 @@ import ProductComponent from "./productDetails/product";
 import CartComponent from "./cart";
 import Favorites from "./favorite";
 import Profile from "./UserProfile/profile";
+import RoomRenovation from "./room/renovation";
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/cart" element={<CartComponent/>} />
         <Route path="/contact/ContactUs" element={<ContactUs />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/room/renovation" element={<RoomRenovation />} />
         <Route path="/productDetails/product" element={<ProductComponent />} />
       </Routes>
     </BrowserRouter>
