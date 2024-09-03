@@ -1,110 +1,107 @@
 /* src/index.css */
+
+/* Tailwind CSS imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* index.css */
+
+/* Slick Carousel styles */
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 
-/* Your custom styles */
-/* styles.css */
-/* index.css or your CSS file */
+/* Custom styles */
 
 /* General button styles */
 .btn {
-    transition: color 0.3s ease, background-color 0.3s ease;
-  }
-  
-  /* Hover effects for buttons */
-  .btn:hover {
-    color: rgb(0, 120, 215); /* Example color on hover */
-    background-color: rgba(0, 120, 215, 0.1); /* Example background color on hover */
-  }
-  
-  /* Apply specific hover effects to different button types if needed */
-  .btn-cart:hover {
-    color: rgb(255, 69, 58); /* Example color on hover for cart button */
-    background-color: rgba(255, 69, 58, 0.1); /* Example background color on hover for cart button */
-  }
-  
-  .btn-favorite:hover {
-    color: rgb(255, 193, 7); /* Example color on hover for favorite button */
-    background-color: rgba(255, 193, 7, 0.1); /* Example background color on hover for favorite button */
-  }
-  
-  .btn-profile:hover {
-    color: rgb(76, 175, 80); /* Example color on hover for profile button */
-    background-color: rgba(76, 175, 80, 0.1); /* Example background color on hover for profile button */
-  }
-  
-  /* Add moving-color class if you still want the RGB animation on hover */
-  @keyframes rgbTransition {
-    0% {
-      color: rgb(255, 0, 0); /* Red */
-    }
-    33% {
-      color: rgb(0, 255, 0); /* Green */
-    }
-    66% {
-      color: rgb(0, 0, 255); /* Blue */
-    }
-    100% {
-      color: rgb(255, 0, 0); /* Red */
-    }
-  }
-  
-  .moving-color:hover {
-    animation: rgbTransition 3s linear infinite;
-  }
-  
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
 
-/* index.css or your CSS file */
+/* Hover effects for buttons */
+.btn:hover {
+  color: rgb(0, 120, 215); /* Example color on hover */
+  background-color: rgba(0, 120, 215, 0.1); /* Example background color on hover */
+}
+
+/* Apply specific hover effects to different button types if needed */
+.btn-cart:hover {
+  color: rgb(255, 69, 58); /* Example color on hover for cart button */
+  background-color: rgba(255, 69, 58, 0.1); /* Example background color on hover for cart button */
+}
+
+.btn-favorite:hover {
+  color: rgb(255, 193, 7); /* Example color on hover for favorite button */
+  background-color: rgba(255, 193, 7, 0.1); /* Example background color on hover for favorite button */
+}
+
+.btn-profile:hover {
+  color: rgb(76, 175, 80); /* Example color on hover for profile button */
+  background-color: rgba(76, 175, 80, 0.1); /* Example background color on hover for profile button */
+}
+
+/* Add moving-color class if you still want the RGB animation on hover */
+@keyframes rgbTransition {
+  0% {
+    color: rgb(255, 0, 0); /* Red */
+  }
+  33% {
+    color: rgb(0, 255, 0); /* Green */
+  }
+  66% {
+    color: rgb(0, 0, 255); /* Blue */
+  }
+  100% {
+    color: rgb(255, 0, 0); /* Red */
+  }
+}
+
+.moving-color:hover {
+  animation: rgbTransition 3s linear infinite;
+}
 
 /* General styles for category items */
 .category-item {
-    position: relative;
-    cursor: pointer; /* Show pointer cursor to indicate clickable item */
-    transition: transform 0.3s ease;
-  }
-  
-  /* Hover effect */
-  .category-item:hover,
-  .category-item:focus-within {
-    transform: scale(1.05);
-  }
-  
-  .category-item img {
-    transition: opacity 0.3s ease;
-  }
-  
-  /* Overlay styles */
+  position: relative;
+  cursor: pointer; /* Show pointer cursor to indicate clickable item */
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+.category-item:hover,
+.category-item:focus-within {
+  transform: scale(1.05);
+}
+
+.category-item img {
+  transition: opacity 0.3s ease;
+}
+
+/* Overlay styles */
+.category-item .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-item:hover .overlay,
+.category-item:focus-within .overlay {
+  opacity: 1;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
   .category-item .overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    opacity: 1; /* Always show the overlay on mobile */
   }
-  
+
   .category-item:hover .overlay,
   .category-item:focus-within .overlay {
-    opacity: 1;
+    opacity: 1; /* Ensure the overlay stays visible on mobile even if hovered */
   }
-  
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    .category-item .overlay {
-      opacity: 1; /* Always show the overlay on mobile */
-    }
-  
-    .category-item:hover .overlay,
-    .category-item:focus-within .overlay {
-      opacity: 1; /* Ensure the overlay stays visible on mobile even if hovered */
-    }
-  }
-  
+}
