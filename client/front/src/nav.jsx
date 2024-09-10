@@ -5,6 +5,7 @@ import './index.css';
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [cartCount, setCartCount] = useState(0); // Add state for cart count
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,11 +16,11 @@ const Navbar = () => {
           const response = await fetch('http://localhost:5000/api/profile/profile', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`,
+              'Authorization': `Bearer ${token}`, // Ensure this line is correct
               'Content-Type': 'application/json'
             }
           });
-
+    
           if (response.ok) {
             const data = await response.json();
             setUser({ ...data, token });
@@ -33,7 +34,31 @@ const Navbar = () => {
       }
     };
 
+    const fetchCartCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await fetch('http://localhost:5000/api/cart', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setCartCount(data.length); // Assume the response is an array of cart items
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch cart count:', error);
+        setCartCount(0);
+      }
+    };
+
     fetchUser();
+    fetchCartCount();
   }, []);
 
   const handleLogout = async () => {
@@ -62,24 +87,22 @@ const Navbar = () => {
         <div className="hidden md:flex flex-1 pl-48 justify-center items-center space-x-8">
           <Link to="/contact/ContactUs" className="text-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-gray-300 moving-color">Contact</Link>
           <Link to="/room/renovation" className="text-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-gray-300 moving-color">Room Renovation</Link>
-          <div className="relative max-w-xs mx-auto">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full px-3 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4a7 7 0 0111 11M4.27 4.27a9 9 0 1012.85 12.85" />
-          </div>
+          
         </div>
 
         <div className="flex items-center space-x-4 ml-auto">
-          <Link to="/cart">
+          <Link to="/cart" className="relative">
             <button className="btn btn-cart text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white focus:outline-none">
               <img
                 src="https://icons.veryicon.com/png/o/miscellaneous/swing/shopping-cart-228.png"
                 alt="Cart"
                 className="w-6 h-6"
               />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full px-2 text-sm">
+                  {cartCount}
+                </span>
+              )}
             </button>
           </Link>
           <Link to="/favorite">
@@ -137,14 +160,7 @@ const Navbar = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <div className="relative w-full max-w-xs mx-auto px-4 mt-6">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full px-3 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4a7 7 0 0111 11M4.27 4.27a9 9 0 1012.85 12.85" />
-          </div>
+          
           <div className="flex flex-col items-center py-4 space-y-2">
             <Link to="/contact/ContactUs" className="text-gray-700 dark:text-white text-lg moving-color">Contact</Link>
             {!user ? (

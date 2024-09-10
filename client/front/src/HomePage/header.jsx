@@ -1,5 +1,4 @@
-
-
+import { Link } from 'react-router-dom';
 import React, { useRef, useEffect } from 'react';
 import headervid from "../assets/0810(1).mp4";
 
@@ -15,7 +14,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative flex flex-col md:flex-row pt-28 md:pt-16">
+    <section className="relative flex flex-col md:flex-row  ">
       {/* Video Section */}
       <div className="w-full relative">
         <div className="relative overflow-hidden">
@@ -31,9 +30,11 @@ const HeroSection = () => {
           >
             Your browser does not support the video tag.
           </video>
-          <a href="#" className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">
-            Shop Now
-          </a>
+          <Link to="/products">
+            <button className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">
+              Shop Now
+            </button>
+          </Link>
         </div>
       </div>
     </section>

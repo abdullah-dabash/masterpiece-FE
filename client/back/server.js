@@ -10,6 +10,8 @@ const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const contactRoutes = require('./routes/contactRoutes'); 
 const renovationRoutes = require('./routes/renovationRoutes'); // New line
+const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/renovation', upload.single('roomImage'), renovationRoutes); // New line for renovation routes with file upload
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
 
 // Serve static files from 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
