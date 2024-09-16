@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Navbar from './nav';
 import Footer from './footer';
-import Swal from 'sweetalert2'; // For notifications
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const CartComponent = () => {
   const [couponCode, setCouponCode] = useState('');
   const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/cart', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5000/api/cart', {
+          headers: { 'Authorization': `Bearer ${token}` }
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Fetched cart items:', data); // Log data to check its structure
-          setCartItems(data);
-        } else {
-          console.error('Failed to fetch cart items');
-        }
+        setCartItems(response.data);
       } catch (error) {
-        console.error('Error fetching cart items:', error);
+        setError('Error fetching cart items');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -41,20 +41,13 @@ const CartComponent = () => {
     const newQuantity = Math.max(1, item.quantity + delta);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/update/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ quantity: newQuantity })
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`http://localhost:5000/api/cart/update/${id}`, {
+        quantity: newQuantity
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-
-      if (response.ok) {
-        const updatedCart = await response.json();
-        setCartItems(updatedCart.cart);
-      } else {
-        console.error('Failed to update item quantity');
-      }
+      setCartItems(response.data.cart);
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
@@ -62,38 +55,62 @@ const CartComponent = () => {
 
   const handleRemoveItem = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/remove/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(`http://localhost:5000/api/cart/remove/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-
-      if (response.ok) {
-        const updatedCart = await response.json();
-        setCartItems(updatedCart.cart);
-        Swal.fire('Removed!', 'Item has been removed from your cart.', 'success');
-      } else {
-        Swal.fire('Error!', 'Failed to remove item from cart.', 'error');
-      }
+      setCartItems(response.data.cart);
+      Swal.fire('Removed!', 'Item has been removed from your cart.', 'success');
     } catch (error) {
       console.error('Error removing item:', error);
       Swal.fire('Error!', 'Failed to remove item from cart.', 'error');
     }
   };
 
+  const handleClearCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.delete('http://localhost:5000/api/cart/clear', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      setCartItems(response.data.cart);
+      Swal.fire('Cleared!', 'Your cart has been cleared.', 'success');
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      Swal.fire('Error!', 'Failed to clear cart.', 'error');
+    }
+  };
+
   const calculateTotal = () => {
-    const subtotal = cartItems.reduce((total, item) => {
+    return cartItems.reduce((total, item) => {
       const price = parseFloat(item.productId.price) || 0;
       const quantity = parseInt(item.quantity, 10) || 0;
       return total + (price * quantity);
     }, 0);
-    return subtotal;
   };
 
   const subtotal = calculateTotal();
   const discount = couponCode === 'SAVE10' ? 0.10 * subtotal : 0;
   const total = subtotal - discount;
+
+  const handleCheckout = () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      Swal.fire('Not logged in', 'Please log in to proceed to checkout.', 'warning');
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      Swal.fire('Cart is empty', 'Please add items to your cart before proceeding to checkout.', 'info');
+      return;
+    }
+
+    navigate('/Payment');
+  };
+
+  if (loading) return <p className="text-center text-gray-600">Loading...</p>;
+  if (error) return <p className="text-center text-red-600">{error}</p>;
 
   return (
     <>
@@ -106,7 +123,11 @@ const CartComponent = () => {
             {cartItems.length > 0 ? (
               cartItems.map(item => (
                 <div key={item._id} className="flex items-center p-4 border border-gray-200 rounded-lg">
-                  <img src={item.productId.image} alt={item.productId.name} className="w-24 h-24 object-cover rounded-md mr-4" />
+                  <img 
+                    src={`http://localhost:4000/uploads/${item.productId.imageUrl}`} 
+                    alt={item.productId.name} 
+                    className="w-24 h-24 object-cover rounded-md mr-4" 
+                  />
                   <div className="flex-1">
                     <h3 className="text-lg font-medium">{item.productId.name}</h3>
                     <p className="text-gray-600 mb-2">{item.productId.description}</p>
@@ -138,6 +159,15 @@ const CartComponent = () => {
             ) : (
               <p>No items in the cart</p>
             )}
+          </div>
+          {/* Clear Cart Button */}
+          <div className="mt-6">
+            <button
+              onClick={handleClearCart}
+              className="bg-red-600 text-white px-4 py-2 rounded-md"
+            >
+              Clear Cart
+            </button>
           </div>
         </div>
 
@@ -179,7 +209,7 @@ const CartComponent = () => {
             <span>${total.toFixed(2)}</span>
           </div>
           <button
-            onClick={() => Swal.fire('Checkout functionality is not yet implemented.')}
+            onClick={handleCheckout}
             className="bg-green-600 text-white px-4 py-2 rounded-md"
           >
             Checkout

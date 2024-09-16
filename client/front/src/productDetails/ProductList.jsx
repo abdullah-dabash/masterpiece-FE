@@ -14,14 +14,13 @@ const ProductList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch products
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products/all', {
+        const response = await axios.get('http://localhost:4000/api/products/all', {
           params: {
             search,
             category,
-            price: price.trim(), // Ensure no leading/trailing spaces
+            price: price.trim(),
           },
         });
         setProducts(response.data);
@@ -36,14 +35,9 @@ const ProductList = () => {
   }, [search, category, price]);
 
   useEffect(() => {
-    // Fetch categories
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products/all', {
-          params: {
-            // Fetch categories only
-          },
-        });
+        const response = await axios.get('http://localhost:4000/api/products/all');
         const uniqueCategories = [...new Set(response.data.map(product => product.category))];
         setCategories(uniqueCategories);
       } catch (error) {
@@ -103,6 +97,11 @@ const ProductList = () => {
           {products.map((product) => (
             <li key={product._id} className="border border-gray-300 rounded-md shadow-md overflow-hidden">
               <Link to={`/product/${product._id}`} className="block p-4 hover:bg-gray-50">
+                <img
+                  src={`http://localhost:4000/uploads/${product.imageUrl}`}
+                  alt={product.name}
+                  className="w-full h-48 object-cover mb-4"
+                />
                 <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
                 <p className="text-gray-700">Price: ${product.price}</p>
               </Link>

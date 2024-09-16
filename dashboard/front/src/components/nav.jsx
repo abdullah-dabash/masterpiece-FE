@@ -59,10 +59,11 @@ const Navbar = () => {
                 Products
               </Link>
               <Link
-                to="/dashboard/orders"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                to="/dashboard/OrderDashboard"
+                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                onClick={toggleMenu} // Close menu on link click
               >
-                Orders
+                orders
               </Link>
               <Link
                 to="/dashboard/messages"
@@ -122,13 +123,7 @@ const Navbar = () => {
               >
                 Products
               </Link>
-              <Link
-                to="/dashboard/orders"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={toggleMenu} // Close menu on link click
-              >
-                Orders
-              </Link>
+              
               <Link
                 to="/dashboard/messages"
                 className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
@@ -142,6 +137,13 @@ const Navbar = () => {
                 onClick={toggleMenu} // Close menu on link click
               >
                 Renovations
+              </Link>
+              <Link
+                to="/dashboard/OrderDashboard"
+                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                onClick={toggleMenu} // Close menu on link click
+              >
+                orders
               </Link>
               <button
                 onClick={() => {

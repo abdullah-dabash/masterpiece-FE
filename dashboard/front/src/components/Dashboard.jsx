@@ -25,7 +25,7 @@ const Dashboard = () => {
             <p className="text-gray-600">Add, view, and manage your products.</p>
           </Link>
           <Link 
-            to="/dashboard/orders" 
+            to="/dashboard/OrderDashboard" 
             className="bg-white p-6 rounded-lg shadow-lg hover:bg-gray-50 transition"
           >
             <h2 className="text-xl font-semibold mb-2">View Orders</h2>
