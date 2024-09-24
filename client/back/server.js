@@ -1,4 +1,5 @@
 require('dotenv').config();
+const upload = require('./multerConfig'); // Adjust the path accordingly
 
 const express = require('express');
 const cors = require('cors');
@@ -18,21 +19,12 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
+  origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both origins
   credentials: true, // Allow cookies to be sent and received
 }));
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Directory to save uploaded files
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
-  }
-});
 
-const upload = multer({ storage });
+
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -44,7 +36,7 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/renovation', upload.single('roomImage'), renovationRoutes); // Renovation routes with file upload
+app.use('/api/renovation', upload.single('roomImage'), renovationRoutes); 
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api', orderRoutes);
@@ -52,6 +44,8 @@ app.use('/api', orderRoutes);
 // Serve static files from 'uploads/models' directory
 app.use('/uploads/models', express.static(path.join(__dirname, 'uploads/models')));
 app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
+app.use('/api/renovation', upload.single('roomImage'), renovationRoutes);
+
 
 
 

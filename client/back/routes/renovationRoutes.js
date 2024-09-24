@@ -1,28 +1,12 @@
 // routes/renovationRoutes.js
 const express = require('express');
 const router = express.Router();
-const Renovation = require('../models/Renovation'); // Adjust path as necessary
+const { createRenovation, getAllRenovations } = require('../controllers/renovationController'); // Import the new function
 
-// POST route for room renovation
-router.post('/', async (req, res) => {
-  try {
-    const { wallHeight, wallWidth, name, email, phone } = req.body;
-    const roomImage = req.file.path; // File path from multer
+// POST route for creating a renovation
+router.post('/', createRenovation);
 
-    const newRenovation = new Renovation({
-      roomImage,
-      wallHeight,
-      wallWidth,
-      name,
-      email,
-      phone,
-    });
-
-    await newRenovation.save();
-    res.status(201).json({ message: 'Room renovation submitted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to submit renovation', error });
-  }
-});
+// GET route to fetch all renovations
+router.get('/all', getAllRenovations); // Use the new controller function
 
 module.exports = router;

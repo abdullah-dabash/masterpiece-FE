@@ -4,13 +4,16 @@ import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Navbar from '../nav';
 import Room from '../room';
-import Modal from '../modal'; // Import the Modal component
+import Modal from '../modal';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, ChevronUp, ChevronDown, ShoppingCart, Box } from 'lucide-react'; // Changed Cube to Box
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showRoom, setShowRoom] = useState(false); // State for controlling modal visibility
+  const [showRoom, setShowRoom] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -29,13 +32,11 @@ const ProductDetail = () => {
         setLoading(false);
       }
     };
-
     fetchProduct();
   }, [id]);
 
   const addToCart = async () => {
     if (!product) return;
-
     try {
       await axios.post('http://localhost:5000/api/cart/add', {
         productId: product._id,
@@ -59,47 +60,120 @@ const ProductDetail = () => {
     }
   };
 
-  if (loading) return <p className="text-center text-gray-600">Loading...</p>;
-  if (error) return <p className="text-center text-red-600">{error}</p>;
+  if (loading) return (
+    <motion.div 
+      className="flex justify-center items-center h-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div 
+        className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      />
+    </motion.div>
+  );
+
+  if (error) return (
+    <motion.p 
+      className="text-center text-red-600 text-2xl mt-20"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {error}
+    </motion.p>
+  );
 
   return (
     <>
       <Navbar />
-      <div className="container mx-auto px-4 py-8 pt-24">
+      <motion.div 
+        className="container mx-auto px-4 py-8 pt-24"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex flex-col md:flex-row gap-8">
-          {product && product.imageUrl ? (
-            <img
-              src={`http://localhost:4000/uploads/${product.imageUrl}`}
-              alt={product.name}
-              className="w-full md:w-1/2 h-auto object-cover rounded-lg"
-            />
-          ) : (
-            <p className="text-center text-gray-600">Image not available</p>
-          )}
-          <div className="md:w-1/2">
+          <motion.div 
+            className="md:w-1/2"
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {product && product.imageUrl ? (
+              <motion.img
+                src={`http://localhost:4000/uploads/${product.imageUrl}`}
+                alt={product.name}
+                className="w-full h-auto object-cover rounded-lg shadow-lg"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              />
+            ) : (
+              <p className="text-center text-gray-600">Image not available</p>
+            )}
+          </motion.div>
+          <motion.div 
+            className="md:w-1/2"
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <h1 className="text-4xl font-bold mb-4">{product?.name}</h1>
-            <p className="text-xl font-semibold mb-4">${product?.price?.toFixed(2)}</p>
-            <p className="mb-4">{product?.description}</p>
-            <button
+            <div className="flex items-center mb-4">
+              <p className="text-2xl font-semibold text-blue-600">${product?.price?.toFixed(2)}</p>
+              <div className="ml-4 flex items-center">
+                {[...Array(5)].map((_, index) => (
+                  <Star key={index} className="text-yellow-400 fill-current" size={20} />
+                ))}
+                <span className="ml-2 text-gray-600">(4.5)</span>
+              </div>
+            </div>
+            <motion.div
+              className="mb-4 bg-gray-100 p-4 rounded-lg"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: showDescription ? 'auto' : 0, opacity: showDescription ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p>{product?.description}</p>
+            </motion.div>
+            <motion.button
+              className="w-full mb-4 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg flex justify-between items-center"
+              onClick={() => setShowDescription(!showDescription)}
+              whileHover={{ backgroundColor: '#e5e7eb' }}
+            >
+              <span>Description</span>
+              {showDescription ? <ChevronUp /> : <ChevronDown />}
+            </motion.button>
+            <motion.button
               onClick={addToCart}
-              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+              className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 flex items-center justify-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
+              <ShoppingCart className="mr-2" size={20} />
               Add to Cart
-            </button>
-            <button
-              onClick={() => setShowRoom(true)} // Open the modal
-              className="ml-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            </motion.button>
+            <motion.button
+              onClick={() => setShowRoom(true)}
+              className="w-full mt-4 bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 flex items-center justify-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Show  3D  Model
-            </button>
-          </div>
+              <Box className="mr-2" size={20} /> {/* Changed Cube to Box */}
+              Show 3D Model
+            </motion.button>
+          </motion.div>
         </div>
-      </div>
-
-      {/* Modal with Room component */}
-      <Modal isOpen={showRoom} onClose={() => setShowRoom(false)}>
-        {product?.modelUrl && <Room modelUrl={`http://localhost:4000/uploads/${product.modelUrl}`} />}
-      </Modal>
+      </motion.div>
+      <AnimatePresence>
+        {showRoom && (
+          <Modal isOpen={showRoom} onClose={() => setShowRoom(false)}>
+            {product?.modelUrl && <Room modelUrl={`http://localhost:4000/uploads/${product.modelUrl}`} />}
+          </Modal>
+        )}
+      </AnimatePresence>
     </>
   );
 };

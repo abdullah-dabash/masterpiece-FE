@@ -17,7 +17,7 @@ connectDB();
 
 // Update CORS configuration to allow requests from multiple origins
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow these origins
+  origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both frontend origins
   credentials: true, // Allow cookies to be sent and received
 }));
 
@@ -69,6 +69,7 @@ app.use('/api/messages', contactRoutes); // Use contact route
 app.use('/uploads', express.static('uploads'));
 app.use('/images', express.static(path.join(__dirname, 'uploads/images')));
 app.use('/models', express.static(path.join(__dirname, 'uploads/models')));
+app.use('/renovation', express.static(path.join(__dirname, 'uploads/renovation')));
 app.use('/api/orders', orderRoutes); // Order routes, protected by authentication middleware
 
 // In your server file, add this route for handling logout
