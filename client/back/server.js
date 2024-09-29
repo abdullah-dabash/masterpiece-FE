@@ -45,8 +45,7 @@ app.use('/api', orderRoutes);
 app.use('/uploads/models', express.static(path.join(__dirname, 'uploads/models')));
 app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
 app.use('/api/renovation', upload.single('roomImage'), renovationRoutes);
-
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 const PORT = process.env.PORT || 5000;

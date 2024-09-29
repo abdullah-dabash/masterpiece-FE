@@ -5,7 +5,7 @@ import axios from 'axios';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate(); // Use useNavigate instead of useHistory
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,7 +15,7 @@ function Login() {
                 password,
             });
             localStorage.setItem('token', response.data.token);
-            navigate('/'); // Use navigate for redirection
+            navigate('/');
         } catch (error) {
             console.error('Login failed', error);
             alert('Invalid credentials');
@@ -61,37 +61,16 @@ function Login() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
-                                    </div>
-                                </div>
-                                <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
-                            </div>
 
                             <button
                                 type="submit"
-                                className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg bg-red-500 hover:bg-red-600 text-dark font-medium focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg bg-black hover:bg-gray-800 text-white font-medium focus:ring-4 focus:outline-none focus:ring-primary-300"
                             >
                                 Sign in
                             </button>
 
-                            <div className="flex flex-col items-center mt-4">
-                                <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg bg-red-500 hover:bg-red-600 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 w-full justify-center">
-                                    <img
-                                        src="https://cdn-icons-png.freepik.com/512/145/145804.png"
-                                        alt="Google Logo"
-                                        className="w-5 h-5 mr-2"
-                                    />
-                                    Sign in with Google
-                                </button>
-                            </div>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400 mt-4">
-                                Don’t have an account yet? <Link to="/signup" className="font-medium b text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
+                                Don’t have an account yet? <Link to="/signup" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
                             </p>
                         </form>
                     </div>

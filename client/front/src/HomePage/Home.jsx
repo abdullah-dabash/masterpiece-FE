@@ -4,9 +4,9 @@ import BestSellingProducts from "./bestSeling";
 import BrowseByCategory from "./category";
 import FlashSale from "./flash";
 import HeroSection from "./header";
-import { RevealBento } from "./newarrival";
+import Newarrival from "./newarrival";
 import Featured from "./featured";
-
+import HighEndFeatures from "./whyHighEnd";
 function Home (){
 
     return(
@@ -18,7 +18,8 @@ function Home (){
         <BrowseByCategory/>
         <Featured/>
         
-        <RevealBento/>
+        <Newarrival/>
+        <HighEndFeatures/>
         <Footer/>
         </>
     )

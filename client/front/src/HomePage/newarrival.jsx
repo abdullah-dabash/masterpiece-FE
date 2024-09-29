@@ -1,8 +1,8 @@
 import React from 'react';
 
-export const RevealBento = () => {
+const NewArrival = () => {
   return (
-    <div className="min-h-screen bg-gray-100 px-4 py-12 text-zinc-50">
+    <div className="bg-white px-4 py-12 text-zinc-50"> {/* Removed min-h-screen */}
       {/* Header */}
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
         New Arrival
@@ -35,3 +35,5 @@ export const RevealBento = () => {
     </div>
   );
 };
+
+export default NewArrival; // Changed to default export
