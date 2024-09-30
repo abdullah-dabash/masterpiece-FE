@@ -6,14 +6,13 @@ import Navbar from '../nav';
 import Room from '../room';
 import Modal from '../modal';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, ChevronUp, ChevronDown, ShoppingCart, Box } from 'lucide-react'; // Changed Cube to Box
+import { ShoppingCart, Box } from 'lucide-react';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showRoom, setShowRoom] = useState(false);
-  const [showDescription, setShowDescription] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -68,7 +67,7 @@ const ProductDetail = () => {
       exit={{ opacity: 0 }}
     >
       <motion.div 
-        className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"
+        className="w-16 h-16 border-t-4 border-black border-solid rounded-full animate-spin"
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       />
@@ -77,7 +76,7 @@ const ProductDetail = () => {
 
   if (error) return (
     <motion.p 
-      className="text-center text-red-600 text-2xl mt-20"
+      className="text-center text-black text-2xl mt-20"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -120,35 +119,14 @@ const ProductDetail = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h1 className="text-4xl font-bold mb-4">{product?.name}</h1>
-            <div className="flex items-center mb-4">
-              <p className="text-2xl font-semibold text-blue-600">${product?.price?.toFixed(2)}</p>
-              <div className="ml-4 flex items-center">
-                {[...Array(5)].map((_, index) => (
-                  <Star key={index} className="text-yellow-400 fill-current" size={20} />
-                ))}
-                <span className="ml-2 text-gray-600">(4.5)</span>
-              </div>
-            </div>
-            <motion.div
-              className="mb-4 bg-gray-100 p-4 rounded-lg"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: showDescription ? 'auto' : 0, opacity: showDescription ? 1 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p>{product?.description}</p>
+            <h1 className="text-4xl font-bold mb-4 text-black">{product?.name}</h1>
+            <p className="text-2xl font-semibold text-black">${product?.price?.toFixed(2)}</p>
+            <motion.div className="mb-4 bg-gray-100 p-4 rounded-lg">
+              <p className="text-black">{product?.description}</p>
             </motion.div>
             <motion.button
-              className="w-full mb-4 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg flex justify-between items-center"
-              onClick={() => setShowDescription(!showDescription)}
-              whileHover={{ backgroundColor: '#e5e7eb' }}
-            >
-              <span>Description</span>
-              {showDescription ? <ChevronUp /> : <ChevronDown />}
-            </motion.button>
-            <motion.button
               onClick={addToCart}
-              className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 flex items-center justify-center"
+              className="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-600 flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -161,7 +139,7 @@ const ProductDetail = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Box className="mr-2" size={20} /> {/* Changed Cube to Box */}
+              <Box className="mr-2" size={20} />
               Show 3D Model
             </motion.button>
           </motion.div>

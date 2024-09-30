@@ -13,7 +13,7 @@ import RoomRenovation from "./room/renovation";
 import Room from "./room";
 import PaymentPage from "./Payment";
 import ConfirmationPage from "./ConfirmationPage";
-
+import HighEndAboutUs from "./aboutUs";
 const initialOptions = {
   clientId: "AeahpM50Kr_kMyF07toqJO55ur9-0gGOozGdHeMwJ9IQ_G3Xob_2T2Gg1sthPUGC5rTeRyVH9-E9VfVG", 
   currency: "USD" 
@@ -36,6 +36,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/ConfirmationPage" element={<ConfirmationPage />} />
+          <Route path="/aboutUs" element={<HighEndAboutUs />} />
         </Routes>
       </BrowserRouter>
     </PayPalScriptProvider>

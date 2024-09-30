@@ -12,7 +12,7 @@ const categories = [
 
 const BrowseByCategory = () => {
   return (
-    <section className="py-10 bg-gray-100">
+    <section className="py-10 bg-white">
       <div className="max-w-screen-xl mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-800">Browse by Category</h2>
