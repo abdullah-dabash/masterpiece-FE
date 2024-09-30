@@ -1,9 +1,8 @@
-// src/components/RenovationRequests.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import Navbar from './nav';
-import Modal from 'react-modal'; // Ensure you install react-modal
+import Modal from 'react-modal'; 
 
 const RenovationRequests = () => {
   const [renovations, setRenovations] = useState([]);
