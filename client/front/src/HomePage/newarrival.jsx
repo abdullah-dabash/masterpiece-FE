@@ -2,7 +2,7 @@ import React from 'react';
 
 const NewArrival = () => {
   return (
-    <div className="bg-white px-4 py-12 text-zinc-50"> {/* Removed min-h-screen */}
+    <div className="bg-white px-4 py-12 text-zinc-50 pb-20"> {/* Removed min-h-screen */}
       {/* Header */}
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
         New Arrival

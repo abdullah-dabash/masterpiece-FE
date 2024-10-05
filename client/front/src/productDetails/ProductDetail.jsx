@@ -120,7 +120,7 @@ const ProductDetail = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <h1 className="text-4xl font-bold mb-4 text-black">{product?.name}</h1>
-            <p className="text-2xl font-semibold text-black">${product?.price?.toFixed(2)}</p>
+            <p className="text-2xl font-semibold text-black">{product?.price?.toFixed(2)} JD</p>
             <motion.div className="mb-4 bg-gray-100 p-4 rounded-lg">
               <p className="text-black">{product?.description}</p>
             </motion.div>
@@ -135,7 +135,7 @@ const ProductDetail = () => {
             </motion.button>
             <motion.button
               onClick={() => setShowRoom(true)}
-              className="w-full mt-4 bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 flex items-center justify-center"
+              className="w-full mt-4 bg-green-500 text-white py-3 px-4 rounded-lg bg-gradient-to-r from-pink-500 via-blue-500 to-green-500 text-black font-bold py-2 px-4 rounded-md hover:from-pink-600 hover:via-blue-600 hover:to-green-600 transition-all duration-300 flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

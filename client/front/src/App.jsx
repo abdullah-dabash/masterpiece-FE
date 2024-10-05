@@ -7,7 +7,6 @@ import ContactUs from "./contact/ContactUs";
 import ProductList from "./productDetails/ProductList";
 import ProductDetail from "./productDetails/ProductDetail";
 import CartComponent from "./cart";
-import Favorites from "./favorite";
 import Profile from "./UserProfile/profile";
 import RoomRenovation from "./room/renovation";
 import Room from "./room";
@@ -26,7 +25,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/LogIn" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/favorite" element={<Favorites />} />
           <Route path="/cart" element={<CartComponent />} />
           <Route path="/room" element={<Room />} />
           <Route path="/contact/ContactUs" element={<ContactUs />} />

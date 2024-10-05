@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, ChevronRight } from 'lucide-react';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage mobile menu visibility
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // State to check authentication
+const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const navigate = useNavigate();
 
-  // Check authentication status on component mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       setIsAuthenticated(false);
-      navigate('/'); // Redirect to login page if not authenticated
+      navigate('/');
     }
   }, [navigate]);
 
@@ -21,11 +21,7 @@ const Navbar = () => {
         method: 'POST',
         credentials: 'include',
       });
-
-      // Remove token from local storage
       localStorage.removeItem('token');
-
-      // Redirect to login page
       setIsAuthenticated(false);
       navigate('/');
     } catch (error) {
@@ -33,133 +29,83 @@ const Navbar = () => {
     }
   };
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen); // Toggle menu visibility
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <nav className="bg-gray-800 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            {/* Logo or Brand Name */}
-            <div className="text-2xl font-semibold">
-              <Link to="/dashboard" className="text-white hover:text-gray-300">
-                Dashboard
-              </Link>
-            </div>
-          </div>
-          {isAuthenticated && (
-            <div className="hidden md:flex md:space-x-4">
-              {/* Navigation Links */}
-              <Link
-                to="/dashboard/products"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Products
-              </Link>
-              <Link
-                to="/dashboard/OrderDashboard"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={toggleMenu} // Close menu on link click
-              >
-                orders
-              </Link>
-              <Link
-                to="/dashboard/messages"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Messages
-              </Link>
-              <Link
-                to="/dashboard/renovations"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Renovations
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          )}
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              type="button"
-              className="inline-flex items-center p-2 text-gray-400 hover:text-white focus:outline-none"
-              aria-controls="mobile-menu"
-              aria-expanded={isOpen ? 'true' : 'false'}
-              onClick={toggleMenu} // Toggle menu on click
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="block h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-black text-white transform ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+      >
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-700">
+          <Link to="/dashboard" className="block py-2 px-4 text-white hover:bg-gray-700">
+            Dashboard
+          </Link>
+          <button onClick={toggleSidebar} className="lg:hidden">
+            <X className="h-6 w-6" />
+          </button>
         </div>
-      </div>
-      {/* Mobile Menu */}
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`} id="mobile-menu">
-        <div className="px-2 pt-2 pb-3 space-y-1">
+        <nav className="mt-5">
           {isAuthenticated && (
             <>
               <Link
                 to="/dashboard/products"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={toggleMenu} // Close menu on link click
+                className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700"
               >
-                Products
-              </Link>
-              
-              <Link
-                to="/dashboard/messages"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={toggleMenu} // Close menu on link click
-              >
-                Messages
-              </Link>
-              <Link
-                to="/dashboard/renovations"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={toggleMenu} // Close menu on link click
-              >
-                Renovations
+                <span>Products</span>
+                <ChevronRight className="ml-auto h-5 w-5" />
               </Link>
               <Link
                 to="/dashboard/OrderDashboard"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                onClick={toggleMenu} // Close menu on link click
+                className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700"
               >
-                orders
+                <span>Orders</span>
+                <ChevronRight className="ml-auto h-5 w-5" />
+              </Link>
+              <Link
+                to="/dashboard/messages"
+                className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700"
+              >
+                <span>Messages</span>
+                <ChevronRight className="ml-auto h-5 w-5" />
+              </Link>
+              <Link
+                to="/dashboard/renovations"
+                className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700"
+              >
+                <span>Renovations</span>
+                <ChevronRight className="ml-auto h-5 w-5" />
               </Link>
               <button
-                onClick={() => {
-                  handleLogout();
-                  toggleMenu(); // Close menu on logout
-                }}
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                onClick={handleLogout}
+                className="flex items-center w-full px-4 py-2 text-gray-300 hover:bg-gray-700"
               >
-                Logout
+                <span>Logout</span>
+                <ChevronRight className="ml-auto h-5 w-5" />
               </button>
             </>
           )}
-        </div>
+        </nav>
       </div>
-    </nav>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="flex items-center justify-between px-4 py-3 bg-white border-b lg:hidden">
+          <button onClick={toggleSidebar} className="text-gray-500 focus:outline-none">
+            <Menu className="h-6 w-6" />
+          </button>
+          <div className="text-2xl font-semibold">Dashboard</div>
+        </header>
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+          {/* Your main content goes here */}
+        </main>
+      </div>
+    </div>
   );
 };
 
-export default Navbar;
+export default Sidebar;

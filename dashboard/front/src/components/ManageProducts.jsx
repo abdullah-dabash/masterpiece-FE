@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from './nav';
+import Sidebar from './nav';
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -13,7 +13,7 @@ const ManageProducts = () => {
     model: null
   });
   const [editProductId, setEditProductId] = useState(null);
-  const [error, setError] = useState(null); // State for error messages
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,6 +31,7 @@ const ManageProducts = () => {
 
   const handleAddOrUpdateProduct = async (e) => {
     e.preventDefault();
+    
     const formData = new FormData();
     formData.append('name', newProduct.name);
     formData.append('price', newProduct.price);
@@ -42,22 +43,26 @@ const ManageProducts = () => {
 
     try {
       if (editProductId) {
-        // Update product
-        await axios.put(`http://localhost:4000/api/products/${editProductId}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        setProducts(products.map(product => (product._id === editProductId ? { ...newProduct, _id: editProductId } : product)));
+        const response = await axios.put(
+          `http://localhost:4000/api/products/${editProductId}`, 
+          formData, 
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+        setProducts(products.map(product => 
+          product._id === editProductId ? response.data : product
+        ));
         setEditProductId(null);
       } else {
-        // Add new product
-        const response = await axios.post('http://localhost:4000/api/products/add', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        const response = await axios.post(
+          'http://localhost:4000/api/products/add', 
+          formData, 
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
         setProducts([...products, response.data]);
       }
 
       setNewProduct({ name: '', price: '', description: '', category: '', image: null, model: null });
-      setError(null); // Clear any previous errors
+      setError(null);
     } catch (err) {
       console.error('Error uploading file:', err.response ? err.response.data : err.message);
       setError('Failed to upload product. Please check the file types and try again.');
@@ -87,112 +92,118 @@ const ManageProducts = () => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-gray-100 p-6">
-        <h1 className="text-3xl font-bold mb-6">Manage Products</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Display error message */}
-        <form onSubmit={handleAddOrUpdateProduct} className="bg-white p-6 rounded-lg shadow-lg mb-6">
-          <h2 className="text-xl font-semibold mb-4">{editProductId ? 'Edit Product' : 'Add New Product'}</h2>
-          
-          {/* Product Form Fields */}
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Name</label>
-            <input
-              id="name"
-              type="text"
-              placeholder="Product Name"
-              value={newProduct.name}
-              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
-            <input
-              id="price"
-              type="number"
-              placeholder="Price"
-              value={newProduct.price}
-              onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              id="description"
-              placeholder="Description"
-              value={newProduct.description}
-              onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-            <input
-              id="category"
-              type="text"
-              placeholder="Category"
-              value={newProduct.category}
-              onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700">Product Image</label>
-            <input
-              id="image"
-              type="file"
-              accept="image/*"
-              onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="model" className="block text-sm font-medium text-gray-700">3D Model</label>
-            <input
-              id="model"
-              type="file"
-              accept=".glb,.gltf"
-              onChange={(e) => setNewProduct({ ...newProduct, model: e.target.files[0] })}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <button type="submit" className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600">
-            {editProductId ? 'Update Product' : 'Add Product'}
-          </button>
-        </form>
-
-        {/* Product Cards */}
-        <h2 className="text-2xl font-semibold mb-4">Product List</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div key={product._id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
-              <img src={`http://localhost:4000${product.imageUrl}`} alt={product.name} className="h-40 w-full object-cover mb-4 rounded" />
-              <h3 className="text-lg font-bold">{product.name}</h3>
-              <p className="text-gray-600">${product.price}</p>
-              <p className="text-gray-500">{product.description}</p>
-              <div className="mt-4 flex justify-between">
-                <button
-                  onClick={() => handleEditProduct(product)}
-                  className="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteProduct(product._id)}
-                  className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-black">
+          <div className="container mx-auto px-6 py-8">
+            <h1 className="text-3xl font-bold text-white mb-8">Manage Products</h1>
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+            
+            <div className="bg-gray-900 rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-xl font-semibold text-white mb-4">
+                {editProductId ? 'Edit Product' : 'Add New Product'}
+              </h2>
+              <form onSubmit={handleAddOrUpdateProduct}>
+                <div className="grid grid-cols-1 gap-6 mt-4">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Product Name"
+                      value={newProduct.name}
+                      onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                      className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      placeholder="Price"
+                      value={newProduct.price}
+                      onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                      className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                  <div>
+                    <textarea
+                      placeholder="Description"
+                      value={newProduct.description}
+                      onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                      className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Category"
+                      value={newProduct.category}
+                      onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                      className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })}
+                      className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="file"
+                      accept=".glb,.gltf"
+                      onChange={(e) => setNewProduct({ ...newProduct, model: e.target.files[0] })}
+                      className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end mt-6">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 focus:outline-none focus:shadow-outline-gray active:bg-gray-300 transition duration-150 ease-in-out"
+                  >
+                    {editProductId ? 'Update Product' : 'Add Product'}
+                  </button>
+                </div>
+              </form>
             </div>
-          ))}
-        </div>
+
+            <h2 className="text-2xl font-semibold text-white mb-4">Product List</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <div key={product._id} className="bg-gray-900 rounded-lg shadow-md overflow-hidden">
+                  <img
+                    src={`http://localhost:4000${product.imageUrl}`}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-xl font-semibold text-white">{product.name}</h3>
+                    <p className="text-gray-300 mt-2">${product.price}</p>
+                    <p className="text-gray-400 mt-2">{product.description}</p>
+                    <div className="mt-4 flex justify-between">
+                      <button
+                        onClick={() => handleEditProduct(product)}
+                        className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 focus:outline-none focus:shadow-outline-blue active:bg-gray-300 transition duration-150 ease-in-out"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product._id)}
+                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 focus:outline-none focus:shadow-outline-red active:bg-red-700 transition duration-150 ease-in-out"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 };
 
