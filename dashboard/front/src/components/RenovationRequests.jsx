@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
 import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './nav';
 
@@ -33,11 +32,8 @@ const Modal = ({ isOpen, onClose, children }) => {
     </motion.div>
   );
 };
-=======
-import { motion } from 'framer-motion';
-import Navbar from './nav';
-import Modal from 'react-modal'; 
->>>>>>> c52ea06d9c367b841ce1ce1fcfb2af8c250d29fc
+
+
 
 const RenovationRequests = () => {
   const [renovations, setRenovations] = useState([]);
