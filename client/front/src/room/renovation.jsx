@@ -26,12 +26,75 @@ const RoomRenovation = () => {
   }, []);
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    setImage(e.target.files[0]); // Save the file object directly
+  };
+
+  const handleHeightChange = (e) => {
+    setWallHeight(e.target.value);
+  };
+
+  const handleWidthChange = (e) => {
+    setWallWidth(e.target.value);
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePhoneChange = (e) => {
+    setPhone(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // ... (keep the existing submit logic)
+
+    const formData = new FormData();
+    formData.append('roomImage', image);
+    formData.append('wallHeight', wallHeight);
+    formData.append('wallWidth', wallWidth);
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/renovation', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Your room renovation request has been submitted.',
+          confirmButtonText: 'OK'
+        });
+        // Clear the form after successful submission
+        setImage(null);
+        setWallHeight('');
+        setWallWidth('');
+        setName('');
+        setEmail('');
+        setPhone('');
+      } else {
+        const result = await response.json();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: result.message || 'Something went wrong. Please try again later.'
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong. Please try again later.'
+      });
+    }
   };
 
   return (

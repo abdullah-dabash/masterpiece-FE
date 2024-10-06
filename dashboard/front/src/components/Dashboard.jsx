@@ -60,11 +60,11 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-black min-h-screen">
       <Sidebar />
       <div className="flex-grow p-6 overflow-auto">
         <motion.h1 
-          className="text-3xl font-bold mb-6 text-gray-800"
+          className="text-3xl font-bold mb-6 text-white"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

@@ -60,7 +60,7 @@ const upload = multer({
 app.use(express.json());
 
 // Use the upload middleware for the renovation routes
-app.use('/api/renovations', upload.single('roomImage'), renovationRoutes); // Use renovation route with file upload
+app.use('/api/renovations', upload.single('roomImage'), renovationRoutes); 
 
 // Routes
 app.use('/api/admin', adminRoutes);
