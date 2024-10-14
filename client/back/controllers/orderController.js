@@ -3,12 +3,13 @@ const CartItem = require('../models/CartItem');
 
 // Create an Order
 exports.createOrder = async (req, res) => {
-  const { total } = req.body;
+  const { total, items } = req.body; // Destructure items from the request body
   try {
     const order = new Order({
       user: req.user._id,
       total,
-      status: 'Pending'
+      items, // Include items here
+      status: 'Pending' // Set initial status
     });
 
     await order.save();

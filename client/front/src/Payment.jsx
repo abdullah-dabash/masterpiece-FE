@@ -38,13 +38,18 @@ const PaymentPage = () => {
 
         const totalAmount = cartItems.reduce((sum, item) => sum + (item.productId.price * item.quantity), 0);
 
+        // Create order with items
         const orderResponse = await axios.post('http://localhost:5000/api/orders', {
-          total: totalAmount
+          total: totalAmount,
+          items: cartItems.map(item => ({
+            product: item.productId._id, // Make sure you have the correct ID here
+            quantity: item.quantity
+          }))
         }, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        setOrderID(orderResponse.data.orderID);
+        setOrderID(orderResponse.data._id); // Assuming the order ID is returned as `_id`
         setTotal(totalAmount);
       } catch (error) {
         console.error('Error creating order:', error);

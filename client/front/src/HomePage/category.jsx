@@ -1,20 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useLoader, useFrame } from '@react-three/fiber'; // Add useFrame here
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, Text } from '@react-three/drei';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { motion } from 'framer-motion-3d';
 import { easing } from 'maath';
+import { useNavigate } from 'react-router-dom';
 
-// Sample data for categories
 const categories = [
-  { id: 1, name: 'LED strips', logo: 'https://static.vecteezy.com/system/resources/previews/036/323/329/original/grow-light-led-strip-colored-icon-or-logo-element-vector.jpg' },
-  { id: 2, name: 'LED panels', logo: 'https://eu-cdn.nanoleaf.me/assets/img/products/shapes/owl/triangles/smk/9pk/2-floating-nanoleaf-shapes-light-panels-triangles-starter-kit@1x.png' },
-  { id: 3, name: 'Posters', logo: 'https://i.ebayimg.com/images/g/OmIAAOSw2G5kT3LU/s-l1200.webp' },
-  { id: 4, name: 'Chairs', logo: 'https://workspace.com.pk/wp-content/uploads/2023/03/gaming-chair-post-07-700x700-1.jpg' },
-  { id: 5, name: 'Desks', logo: 'https://images.thdstatic.com/productImages/b13f63d9-af2d-462f-a503-2b942b750214/svn/black-carbon-fiber-bestier-gaming-desks-d471z-gamd-31_600.jpg' },
+  { id: 1, name: 'Nano Leaf', modelFile: '/assets/nano_leaf.glb', scale: 0.5 },
+  { id: 2, name: 'panels', modelFile: '/assets/CherrySign.glb', scale: 4 },
+  { id: 3, name: 'accessories', modelFile: '/assets/razerSpeakers.glb', scale: 0.02 },
+  { id: 4, name: 'chairs', modelFile: '/assets/typingChair.glb', scale: 1.5 },
+  { id: 5, name: 'desks', modelFile: '/assets/gaming_desk_rog.glb', scale: 1 },
 ];
-
-const fallbackTextureUrl = 'https://workspace.com.pk/wp-content/uploads/2023/03/gaming-chair-post-07-700x700-1.jpg'; // Placeholder image
 
 const Room = () => {
   const floorTexture = useLoader(TextureLoader, '/textures/textures.png');
@@ -22,13 +21,11 @@ const Room = () => {
 
   return (
     <>
-      {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4, 0]}>
         <planeGeometry args={[10, 10]} />
         <meshStandardMaterial map={floorTexture} />
       </mesh>
 
-      {/* Walls */}
       <mesh position={[-5, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
         <planeGeometry args={[10, 8]} />
         <meshStandardMaterial map={wallTexture} />
@@ -38,20 +35,18 @@ const Room = () => {
         <meshStandardMaterial map={wallTexture} />
       </mesh>
 
-      {/* Category Objects */}
       {categories.map((category, index) => (
         <CategoryObject
           key={category.id}
           category={category}
           position={[
             Math.cos((index / categories.length) * Math.PI * 2) * 3,
-            Math.sin((index / categories.length) * Math.PI * 2) * 0.5,
-            Math.sin((index / categories.length) * Math.PI * 2) * 3
+            0,
+            Math.sin((index / categories.length) * Math.PI * 2) * 3,
           ]}
         />
       ))}
 
-      {/* Lighting */}
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} />
     </>
@@ -61,54 +56,66 @@ const Room = () => {
 const CategoryObject = ({ category, position }) => {
   const meshRef = useRef();
   const [hovered, setHovered] = useState(false);
-  const [texture, setTexture] = useState(null);
-  const [loadingError, setLoadingError] = useState(false);
+  const [model, setModel] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Load the texture
   useEffect(() => {
-    const loader = new TextureLoader();
+    const loader = new GLTFLoader();
     loader.load(
-      category.logo,
-      (loadedTexture) => {
-        setTexture(loadedTexture);
+      category.modelFile,
+      (gltf) => {
+        gltf.scene.scale.set(category.scale, category.scale, category.scale);
+        setModel(gltf.scene);
+        setLoading(false);
       },
       undefined,
       (error) => {
-        console.error('Error loading texture:', error);
-        setLoadingError(true); // Set loading error state
+        console.error('Error loading GLTF model:', error);
+        setLoading(false);
       }
     );
-  }, [category.logo]);
+  }, [category.modelFile, category.scale]);
 
-  // Use fallback texture if loading failed
-  const finalTexture = loadingError ? new TextureLoader().load(fallbackTextureUrl) : texture;
+  const handleClick = () => {
+    navigate(`/products?category=${category.name}`);
+  };
 
   useFrame((state, delta) => {
     if (meshRef.current) {
-      easing.damp3(meshRef.current.position, [
-        position[0],
-        position[1] + (hovered ? 0.5 : 0),
-        position[2]
-      ], 0.5, delta);
-
+      easing.damp3(
+        meshRef.current.position,
+        [position[0], position[1] + (hovered ? 0.5 : 0), position[2]],
+        0.5,
+        delta
+      );
       meshRef.current.rotation.y += delta * 0.5;
     }
   });
 
   return (
-    <motion.mesh
+    <motion.group
       ref={meshRef}
       position={position}
-      scale={hovered ? 1.2 : 1}
+      scale={hovered ? 1.5 : 1}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      whileHover={{ scale: 1.2 }}
+      onClick={handleClick}
+      whileHover={{ scale: 1.5 }}
       transition={{ type: 'spring', stiffness: 300, damping: 10 }}
     >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial map={finalTexture} />
+      {loading ? (
+        <mesh>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="gray" />
+        </mesh>
+      ) : model ? (
+        <primitive object={model} />
+      ) : (
+        <meshStandardMaterial color="red" />
+      )}
       <Text
-        position={[0, -0.7, 0]}
+        position={[0, 1.2, 0]}
         fontSize={0.2}
         color="white"
         anchorX="center"
@@ -116,7 +123,7 @@ const CategoryObject = ({ category, position }) => {
       >
         {category.name}
       </Text>
-    </motion.mesh>
+    </motion.group>
   );
 };
 

@@ -3,10 +3,32 @@ const Order = require('../models/Order');
 // Get all orders
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate('items.product');
+    const orders = await Order.find().populate({
+      path: 'items.product',
+      model: 'Product'
+    });
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching orders', error });
+  }
+};
+
+// Create a new order
+exports.createOrder = async (req, res) => {
+  const { user, items, total } = req.body;
+
+  try {
+    const newOrder = new Order({
+      user,
+      items,
+      total,
+      status: 'paid', // default status
+    });
+
+    const savedOrder = await newOrder.save();
+    res.status(201).json(savedOrder);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating order', error });
   }
 };
 
@@ -16,7 +38,11 @@ exports.updateOrderStatus = async (req, res) => {
   const { status } = req.body;
 
   try {
-    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+    const order = await Order.findByIdAndUpdate(id, { status }, { new: true })
+      .populate({
+        path: 'items.product',
+        model: 'Product'
+      });
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });

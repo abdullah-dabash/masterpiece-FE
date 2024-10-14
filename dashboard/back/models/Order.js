@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
     quantity: { type: Number, required: true }
   }],
   total: { type: Number, required: true },
-  status: { type: String, default: 'pending' },
+  status: { type: String, default: 'paid', enum: ['paid', 'delivered'] },
   paypalOrderId: { type: String }
 }, { timestamps: true });
 

@@ -2,7 +2,6 @@ import Footer from "../footer";
 import Navbar from "../nav";
 import BestSellingProducts from "./bestSeling";
 import BrowseByCategory from "./category";
-import FlashSale from "./flash";
 import HeroSection from "./header";
 import Newarrival from "./newarrival";
 import Featured from "./featured";
@@ -13,13 +12,11 @@ function Home (){
         <>
         <Navbar/>
         <HeroSection/>
-        <FlashSale/>
         <BestSellingProducts/>
         <BrowseByCategory/>
         <Featured/>
-        
-        <Newarrival/>
         <HighEndFeatures/>
+        <Newarrival/>
         <Footer/>
         </>
     )

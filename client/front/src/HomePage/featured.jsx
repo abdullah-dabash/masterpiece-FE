@@ -38,8 +38,7 @@ const FeaturedShowcase = () => {
 
   return (
     <div className="bg-white">
-    <h2 className="bg-white text-3xl font-extrabold text-center mt-6 mb-8 pt-10 "> Featured 🔥
-      </h2>
+    
       
     <div className="bg-white min-h-screen pt-20 ">
       <motion.div 
@@ -75,7 +74,7 @@ const FeaturedShowcase = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          Featured Products 🎮🔥
+          Coming Soon 🎮🔥
         </motion.h2>
         
         <motion.div 

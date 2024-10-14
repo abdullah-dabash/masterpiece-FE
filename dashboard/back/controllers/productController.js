@@ -23,10 +23,23 @@ const addProduct = async (req, res) => {
   }
 };
 
-// Get All Products
+// Get All Products with filtering
 const getAllProducts = async (req, res) => {
+  const { category, price } = req.query;
+
   try {
-    const products = await Product.find();
+    const filter = {};
+    
+    if (category) {
+      filter.category = category;
+    }
+    
+    if (price) {
+      const [minPrice, maxPrice] = price.split(',').map(Number);
+      filter.price = { $gte: minPrice, $lte: maxPrice };
+    }
+
+    const products = await Product.find(filter);
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json({ message: 'Failed to fetch products', error: err.message });
