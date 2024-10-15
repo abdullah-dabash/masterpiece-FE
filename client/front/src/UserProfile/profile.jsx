@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../nav';
 import Swal from 'sweetalert2';
-import { motion } from 'framer-motion';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, ShoppingCart, Edit, Check, X, User, Mail, Lock } from 'lucide-react';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -13,6 +13,8 @@ const Profile = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editedUsername, setEditedUsername] = useState('');
 
   useEffect(() => {
     const fetchProfileAndFavorites = async () => {
@@ -32,6 +34,7 @@ const Profile = () => {
         ]);
 
         setProfile(profileResponse.data);
+        setEditedUsername(profileResponse.data.username);
         setFavorites(favoritesResponse.data);
       } catch (error) {
         console.error('Error fetching profile or favorites:', error);
@@ -76,6 +79,36 @@ const Profile = () => {
         icon: 'error',
         title: 'Oops...',
         text: 'Failed to change password.',
+      });
+    }
+  };
+
+  const handleProfileEdit = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('User token is not available.');
+      }
+
+      await axios.put('http://localhost:5000/api/profile/update', 
+        { username: editedUsername },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setProfile({...profile, username: editedUsername});
+      setIsEditingProfile(false);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Profile Updated',
+        text: 'Your profile has been updated successfully.',
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Failed to update profile.',
       });
     }
   };
@@ -137,111 +170,160 @@ const Profile = () => {
     }
   };
 
+  const cardVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: { 
+      scale: 1, 
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 12
+      }
+    },
+    hover: {
+      scale: 1.05,
+      rotateY: 5,
+      boxShadow: "0px 5px 15px rgba(0,0,0,0.1)",
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 20
+      }
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <div className='pt-32'></div>
-      <motion.div 
-        className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-md"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        {profile ? (
-          <div className="space-y-8">
-            <motion.div variants={itemVariants} className="mb-6">
-              <h1 className="text-3xl font-bold mb-2">{profile.username}</h1>
-              <p className="text-gray-700">Email: {profile.email}</p>
-            </motion.div>
-            <motion.button
-              variants={itemVariants}
-              className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none transition duration-300"
-              onClick={() => setIsChangingPassword(!isChangingPassword)}
-            >
-              {isChangingPassword ? 'Cancel' : 'Change Password'}
-            </motion.button>
-            {isChangingPassword && (
-              <motion.form 
-                onSubmit={handlePasswordChange} 
-                className="space-y-4"
+      <div className='pt-32 bg-gray-100 min-h-screen'>
+        <motion.div 
+          className="p-8 max-w-6xl mx-auto bg-white rounded-xl shadow-2xl"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {profile ? (
+            <div className="space-y-12">
+              <motion.div variants={itemVariants} className="mb-8">
+                <div className="flex justify-between items-center">
+                  {isEditingProfile ? (
+                    <input
+                      type="text"
+                      value={editedUsername}
+                      onChange={(e) => setEditedUsername(e.target.value)}
+                      className="text-4xl font-bold mb-2 border-b-2 border-gray-300 focus:outline-none focus:border-black"
+                    />
+                  ) : (
+                    <h1 className="text-4xl font-bold mb-2">{profile.username}</h1>
+                  )}
+                  {isEditingProfile ? (
+                    <div>
+                      <button onClick={handleProfileEdit} className="mr-2 p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300"><Check size={18} /></button>
+                      <button onClick={() => setIsEditingProfile(false)} className="p-2 bg-gray-200 text-black rounded-full hover:bg-gray-300 transition duration-300"><X size={18} /></button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setIsEditingProfile(true)} className="p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300"><Edit size={18} /></button>
+                  )}
+                </div>
+                <div className="flex items-center space-x-2 text-gray-600">
+                  <Mail size={18} />
+                  <p>{profile.email}</p>
+                </div>
+              </motion.div>
+              <motion.button
                 variants={itemVariants}
-                initial="hidden"
-                animate="visible"
+                className="mb-6 px-6 py-3 bg-black text-white rounded-full shadow hover:bg-gray-800 focus:outline-none transition duration-300 flex items-center space-x-2"
+                onClick={() => setIsChangingPassword(!isChangingPassword)}
               >
-                <div>
-                  <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">New Password</label>
-                  <input
-                    type="password"
-                    id="newPassword"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  />
-                </div>
-                {passwordError && <p className="text-red-500">{passwordError}</p>}
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 focus:outline-none transition duration-300"
-                >
-                  Change Password
-                </button>
-              </motion.form>
-            )}
-            <motion.div variants={itemVariants}>
-              <h2 className="text-2xl font-bold mb-4">Favorite Products</h2>
-              {favorites.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {favorites.map((product) => (
-                    <motion.div 
-                      key={product._id} 
-                      className="bg-white rounded-lg shadow-md overflow-hidden"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <img 
-                        src={`http://localhost:4000/uploads/${product.imageUrl}`} 
-                        alt={product.name} 
-                        className="w-full h-48 object-cover"
+                <Lock size={18} />
+                <span>{isChangingPassword ? 'Cancel' : 'Change Password'}</span>
+              </motion.button>
+              <AnimatePresence>
+                {isChangingPassword && (
+                  <motion.form 
+                    onSubmit={handlePasswordChange} 
+                    className="space-y-4"
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <div>
+                      <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">New Password</label>
+                      <input
+                        type="password"
+                        id="newPassword"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm"
                       />
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
-                        <p className="text-gray-600 mb-2">${product.price.toFixed(2)}</p>
-                        <div className="flex justify-between items-center">
+                    </div>
+                    <div>
+                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                      <input
+                        type="password"
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm"
+                      />
+                    </div>
+                    {passwordError && <p className="text-red-500">{passwordError}</p>}
+                    <button type="submit" className="w-full px-4 py-2 bg-black text-white rounded-full shadow hover:bg-gray-800 focus:outline-none transition duration-300">Change Password</button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+              <motion.div variants={itemVariants}>
+                <h2 className="text-3xl font-bold mb-6">Favorite Products</h2>
+                {favorites.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {favorites.map((product) => (
+                      <motion.div 
+                        key={product._id} 
+                        className="bg-white rounded-xl shadow-lg overflow-hidden transform perspective-1000"
+                        variants={cardVariants}
+                        whileHover="hover"
+                      >
+                        <div className="relative h-64 overflow-hidden">
+                          <img 
+                            src={`http://localhost:4000/uploads/${product.imageUrl}`} 
+                            alt={product.name} 
+                            className="w-full h-full object-cover transform transition duration-300 hover:scale-110"
+                          />
+                          <div className="absolute top-0 right-0 m-4">
+                            <Heart size={24} fill="white" stroke="white" />
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                          <p className="text-gray-600 mb-4">${product.price.toFixed(2)}</p>
                           <button
                             onClick={() => addToCart(product)}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none transition duration-300 flex items-center"
+                            className="w-full px-4 py-2 bg-black text-white rounded-full shadow hover:bg-gray-800 focus:outline-none transition duration-300 flex items-center justify-center space-x-2"
                           >
-                            <ShoppingCart size={18} className="mr-2" />
-                            Add to Cart
+                            <ShoppingCart size={18} />
+                            <span>Add to Cart</span>
                           </button>
-                          <Heart size={24} fill="red" stroke="red" />
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-600">You haven't added any favorites yet.</p>
-              )}
-            </motion.div>
-          </div>
-        ) : (
-          <p>Loading profile...</p>
-        )}
-      </motion.div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-center text-lg">You haven't added any favorites yet.</p>
+                )}
+              </motion.div>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-black"></div>
+            </div>
+          )}
+        </motion.div>
+      </div>
     </>
   );
 };

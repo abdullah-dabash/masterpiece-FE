@@ -111,8 +111,8 @@ const OrderDashboard = () => {
                       <td className="py-3 px-4">${order.total.toFixed(2)}</td>
                       <td className="py-3 px-4">
                         {order.items.map(item => (
-                          <div key={item.product._id} className="text-sm">
-                            {item.product.name} (x{item.quantity})
+                          <div key={item.product?._id} className="text-sm">
+                            {item.product ? item.product.name : 'Unknown Product'} (x{item.quantity})
                           </div>
                         ))}
                       </td>
@@ -120,7 +120,7 @@ const OrderDashboard = () => {
                         {order.status !== 'delivered' ? (
                           <motion.button
                             onClick={() => updateStatus(order._id, 'delivered')}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center"
+                            className="bg-black text-white px-4 py-2 rounded-md  transition-colors duration-200 flex items-center"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                           >
