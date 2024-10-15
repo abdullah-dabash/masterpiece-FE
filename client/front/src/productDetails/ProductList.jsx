@@ -16,6 +16,7 @@ const ProductList = () => {
   const [sortOrder, setSortOrder] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,6 +51,24 @@ const ProductList = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await axios.get('http://localhost:5000/api/favorites', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setFavorites(response.data.map(fav => fav._id));
+        }
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
   const handleSearch = (e) => setSearch(e.target.value);
 
   const handleCategoryChange = (e) => {
@@ -60,6 +79,30 @@ const ProductList = () => {
 
   const handlePriceChange = (e) => setPriceRange(e.target.value);
   const handleSortChange = (e) => setSortOrder(e.target.value);
+
+  const toggleFavorite = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      if (favorites.includes(productId)) {
+        await axios.delete(`http://localhost:5000/api/favorites/remove/${productId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setFavorites(favorites.filter(id => id !== productId));
+      } else {
+        await axios.post(`http://localhost:5000/api/favorites/add/${productId}`, {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setFavorites([...favorites, productId]);
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
 
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(search.toLowerCase())
@@ -153,7 +196,7 @@ const ProductList = () => {
             {sortedProducts.map((product) => (
               <motion.li 
                 key={product._id} 
-                className="bg-white rounded-xl overflow-hidden shadow-md"
+                className="bg-white rounded-xl overflow-hidden shadow-md relative"
                 variants={cardVariants}
                 whileHover="hover"
                 layout
@@ -170,6 +213,18 @@ const ProductList = () => {
                     <p className="text-lg font-semibold">${product.price}</p>
                   </div>
                 </Link>
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFavorite(product._id);
+                  }}
+                  className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md"
+                >
+                  <Heart 
+                    fill={favorites.includes(product._id) ? "red" : "none"} 
+                    stroke={favorites.includes(product._id) ? "red" : "currentColor"}
+                  />
+                </button>
               </motion.li>
             ))}
           </motion.ul>

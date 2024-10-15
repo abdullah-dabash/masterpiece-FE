@@ -13,6 +13,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const renovationRoutes = require('./routes/renovationRoutes'); // New line
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
 const orderRoutes = require('./routes/OrederRoutes'); // Adjust the path to your routes file
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/renovation', upload.single('roomImage'), renovationRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api', orderRoutes);
+app.use('/api/favorites', favoriteRoutes);
 
 // Serve static files from 'uploads/models' directory
 app.use('/uploads/models', express.static(path.join(__dirname, 'uploads/models')));
