@@ -12,7 +12,6 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editedUsername, setEditedUsername] = useState('');
 
@@ -72,7 +71,7 @@ const Profile = () => {
 
       setNewPassword('');
       setConfirmPassword('');
-      setIsChangingPassword(false);
+      setIsEditingProfile(false);
     } catch (error) {
       console.error('Error changing password:', error);
       Swal.fire({
@@ -218,64 +217,48 @@ const Profile = () => {
                   ) : (
                     <h1 className="text-4xl font-bold mb-2">{profile.username}</h1>
                   )}
-                  {isEditingProfile ? (
-                    <div>
-                      <button onClick={handleProfileEdit} className="mr-2 p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300"><Check size={18} /></button>
-                      <button onClick={() => setIsEditingProfile(false)} className="p-2 bg-gray-200 text-black rounded-full hover:bg-gray-300 transition duration-300"><X size={18} /></button>
-                    </div>
-                  ) : (
-                    <button onClick={() => setIsEditingProfile(true)} className="p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300"><Edit size={18} /></button>
-                  )}
+                  
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600">
                   <Mail size={18} />
                   <p>{profile.email}</p>
                 </div>
               </motion.div>
-              <motion.button
-                variants={itemVariants}
-                className="mb-6 px-6 py-3 bg-black text-white rounded-full shadow hover:bg-gray-800 focus:outline-none transition duration-300 flex items-center space-x-2"
-                onClick={() => setIsChangingPassword(!isChangingPassword)}
-              >
-                <Lock size={18} />
-                <span>{isChangingPassword ? 'Cancel' : 'Change Password'}</span>
-              </motion.button>
+              
               <AnimatePresence>
-                {isChangingPassword && (
-                  <motion.form 
-                    onSubmit={handlePasswordChange} 
-                    className="space-y-4"
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                  >
-                    <div>
-                      <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">New Password</label>
-                      <input
-                        type="password"
-                        id="newPassword"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
-                      <input
-                        type="password"
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                      />
-                    </div>
-                    {passwordError && <p className="text-red-500">{passwordError}</p>}
-                    <button type="submit" className="w-full px-4 py-2 bg-black text-white rounded-full shadow hover:bg-gray-800 focus:outline-none transition duration-300">Change Password</button>
-                  </motion.form>
-                )}
+                <motion.form 
+                  onSubmit={handlePasswordChange} 
+                  className="space-y-4"
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+                  <div>
+                    <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">New Password</label>
+                    <input
+                      type="password"
+                      id="newPassword"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm"
+                    />
+                  </div>
+                  {passwordError && <p className="text-red-500">{passwordError}</p>}
+                  <button type="submit" className="w-full px-4 py-2 bg-black text-white rounded-full shadow hover:bg-gray-800 focus:outline-none transition duration-300">Change Password</button>
+                </motion.form>
               </AnimatePresence>
               <motion.div variants={itemVariants}>
                 <h2 className="text-3xl font-bold mb-6">Favorite Products</h2>
